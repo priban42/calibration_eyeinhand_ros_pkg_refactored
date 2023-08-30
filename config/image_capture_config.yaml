@@ -1,0 +1,12 @@
+camera_calibration:
+        directory: "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration/calibration_d435_26_06_23"
+        group: 'panda_arm'
+        use_time_in_image_names: false
+        image_name_prefix: "calibration_image"
+        positions_file: "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/positions/positions_calibrate.txt"
+        max_speed: 0.1
+        image_topic: '/camera/color/image_raw'
+        use_ext_camera: false
+        ext_cam_topic: '/scene_camera/color/image_raw'
+        base_frame: 'panda_link0'
+        eef_frame: 'panda_hand'

@@ -1,0 +1,29 @@
+base_frame: panda_link0
+directory: /home/imitlearn/Desktop/ObjTrackingDataSet/eyeinhandcalib_ws/src/ObjectTrackingDataset/calibration_eyeinhand_ros_pkg/calibration/calibration_d435_26_06_2330-08-2023-11:20:50
+eef_frame: panda_hand
+image_name: calibration_image_014
+image_shape:
+- 720
+- 1280
+- 3
+joint_torques:
+- -0.28161388635635376
+- -10.509517669677734
+- -5.3888068199157715
+- 19.84695816040039
+- 0.6711460947990417
+- 4.1387786865234375
+- 0.737375020980835
+- 0.0
+- 0.0
+joint_values:
+- -0.34767594810438146
+- -0.3788652202266274
+- 0.6610637607323495
+- -2.797583422531272
+- -0.25115741577569073
+- 3.148198649724324
+- 1.7894026895364123
+- 0.040044188499450684
+- 0.040044188499450684
+time: 30-08-2023-11:24:00

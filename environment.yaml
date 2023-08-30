@@ -1,0 +1,17 @@
+channels:
+  - robostack
+  - robostack-staging
+  - conda-forge
+dependencies:
+  - python=3.9
+  - catkin_tools 
+  - ros-noetic-desktop 
+  - ros-noetic-tf2-tools
+  - ros-noetic-combined-robot-hw 
+  - ros-noetic-libfranka 
+  - ros-noetic-franka-ros
+  - ros-noetic-realsense2-camera
+  - scipy
+  - numpy
+  - matplotlib
+  - opencv

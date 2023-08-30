@@ -1,0 +1,14 @@
+<launch>
+	<rosparam command="load" file="$(find calibration_eyeinhand_ros_pkg)/config/image_capture_config.yaml"/>
+
+    <!-- Launches franka_control franka_control.launch, 
+    then a position_joint_trajectory_controller using ros control controller spawner, 
+    then the panda_moveit_config demo.launch (moveit, robot_state_publisher->tf, rviz)  -->
+
+    <!-- <include file="$(find panda_moveit_config)/launch/franka_control.launch">
+        <arg name="robot_ip" value="192.168.102.11" />
+        <arg name="load_gripper" value="true" />
+    </include>-->
+
+	<node pkg="calibration_eyeinhand_ros_pkg" type="camera_calibration_node.py" name="camera_calib_node" respawn="false" output="screen"/>
+</launch>

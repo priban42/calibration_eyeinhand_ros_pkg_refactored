@@ -1,0 +1,14 @@
+directory: "/home/mfourmy/Documents/calibration_cam/calib_dataset_JB/calibrate_images12-05-2023-16_48"
+aruco_dictionary: "DICT_4X4_1000"
+board_squaresX: 10
+board_squaresY: 14
+board_square_size: 0.0702 #[m]
+board_marker_size: 0.04 #[m]
+board_scaling:
+    - 0.997150997
+    - 1
+animate: False
+calibration_data_directory: "/home/mfourmy/Documents/calibration_cam/calib_dataset_JB/results/18-05-2023-18:03:13/"
+calibration_name: "camera_calibration_result.yaml"
+test_directory: "/home/mfourmy/Documents/calibration_cam/calib_dataset_JB/test"
+error_scaling_factor: 10
