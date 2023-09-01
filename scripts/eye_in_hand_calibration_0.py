@@ -227,7 +227,7 @@ def refine_eye_in_hand_calibration(T_gc_init, T_bt_init, T_bg_lst, joint_values_
     pbe = RefinementRobotWorldHandEye(T_gc_init, T_bt_init, T_bg_lst, joint_values_lst, cam_mtx, dist_coef, all_ch_points, all_ch_corners, joint_mask, sag, sag_mask)
     x0 = np.concatenate((np.zeros(12), np.array([0, 0, 0, 0, 0, 0, 0]+[0, 0])), axis=0)
 
-    result = least_squares(fun=pbe.func, x0=x0, jac='3-point', method='trf', verbose=2, xtol=1e-10)
+    result = least_squares(fun=pbe.func, x0=x0, jac='3-point', method='trf', verbose=2, xtol=1e-2)
 
     T_gc, T_bt = pbe.get_transforms(result.x)
     return T_gc, T_bt, np.concatenate((result.x[12:19], np.zeros((2))), axis=0)*pbe.joint_mask*10, result.x[19:20]

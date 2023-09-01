@@ -63,10 +63,9 @@ def calibrate(board, hand_eye_method, paths, image_names_ignored=[], use_eye_in_
     # rvecs_ct, tvecs_ct correspond to target2camera transformation in opencv notation convention 
     cam_mtx, dist_coef, rvecs_ct, tvecs_ct = calibrate_camera(all_ch_points, all_ch_corners, imsize)
     ##### Second iteration: Removes images with poor reprojection errors
-    N = 5
-    for x in range(N):
+    for x in [20, 10, 5]:
         ignore_images = get_poor_detections_images(img_file_map, tvecs_ct, rvecs_ct, cam_mtx, dist_coef,
-                                       all_ch_points, all_ch_corners, all_ch_ids, N-x)
+                                       all_ch_points, all_ch_corners, all_ch_ids, x)
         for img_name in ignore_images:
             img_file_map.pop(img_name)
         all_ch_points, all_ch_corners, all_ch_ids, all_ar_corners, all_ar_ids, unused_image_names = detect_corners_all_imgs(img_file_map, board)
@@ -162,9 +161,6 @@ def calibrate(board, hand_eye_method, paths, image_names_ignored=[], use_eye_in_
         R_sag = pin.SE3(rotation_matrix(np.cross(np.array([0, 0, 1]), eef_pose.translation),
                                         sag[0] * np.linalg.norm(eef_pose.translation[0:2])))
         eef_pose = R_sag*eef_pose
-        # print("eef:", eef_pose)
-        # print("eef_change:", -sag[0]*(np.linalg.norm(eef_pose.translation[0:2])**2))
-        # print("eef_pose2:", eef_pose)
         new_t_bg = np.array(eef_pose.translation)
         new_R_bg = np.array(eef_pose.rotation)
         new_T_bg = pin.SE3(new_R_bg, new_t_bg)  # *T_hand
@@ -519,7 +515,7 @@ def setup_paths_and_create_directories(config):
     # Sub directories for storing calibration results for each expe
     expe_name = config['expe_name']
     if expe_name == '':
-        expe_name = get_time_str("%d-%m-%Y-%H:%M:%S")
+        expe_name = get_time_str("%d_%m_%Y_%H_%M_%S")
     expe_dir = result_dir / Path(expe_name)  # directory containing all results from one experiment 
 
     # contains both intrinsics and eye in hand results -> split?

@@ -42,11 +42,12 @@ def refresh_path(path):
     os.mkdir(path)
 
 def main():
-    BASE_PATH = "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration"
+    # BASE_PATH = "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration"
+    BASE_PATH = "C:\\Users\\Vojta\\PycharmProjects\\calibration_eyeinhand_ros_pkg\\calibration"
     SPLIT = 1/3
     # new_set_names = ["calibration_merged_1", "calibration_merged_2"]
-    new_set_names = ["calibration_randomized"]
-    sets_to_merge = ["calibration_d435_alternative_high_res", "calibration_d435_final_high_res"]
+    new_set_names = ["calibration_d455_merged"]
+    sets_to_merge = ["calibration_d455_high_res_1", "calibration_d455_high_res_2"]
     entries = get_all_entries(BASE_PATH, sets_to_merge)
     random.shuffle(entries)
     for name in new_set_names:
@@ -59,12 +60,13 @@ def main():
         copy_entries_to_dir(split_entry, new_set_path)
 
 def random_split(seed):
-    BASE_PATH = "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration"
+    # BASE_PATH = "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration"
+    BASE_PATH = "C:\\Users\\Vojta\\PycharmProjects\\calibration_eyeinhand_ros_pkg\\calibration"
     SPLIT = 1
     # CHUNK_SIZES = [0.6, 0.4] # len = len(new_set_names), sum = 1
     CHUNK_SIZES = [1]
-    # new_set_names = ["calibration_merged_1", "calibration_merged_2"]
-    new_set_names = ["calibration_effort_merged", "calibration_test"]
+    new_set_names = ["calibration_merged"]
+    # new_set_names = ["calibration_d455_train", "calibration_d455_test"]
     sets_to_merge = ["calibration_d455_high_res_1", "calibration_d455_high_res_2"]
     entries = get_all_entries(BASE_PATH, sets_to_merge)
     random.seed(seed)

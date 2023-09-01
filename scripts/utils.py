@@ -9,7 +9,7 @@ def get_images_paths(data_dir: Path):
     return sorted([path for path in data_dir.iterdir() if path.is_file() and path.suffix in {'.jpg', '.jpeg', '.png'}])
 
 
-def load_images(data_dir, cropout_hand = False):
+def load_images(data_dir, cropout_hand = True):
     image_paths = get_images_paths(data_dir)
     img_file_map = OrderedDict()
     for img_path in image_paths:

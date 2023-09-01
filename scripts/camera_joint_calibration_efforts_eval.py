@@ -66,7 +66,7 @@ def calibrate(board, hand_eye_method, paths, image_names_ignored=[], use_eye_in_
     cam_mtx, dist_coef, rvecs_ct, tvecs_ct = calibrate_camera(all_ch_points, all_ch_corners, imsize)
     print(":5")
     ##### Second iteration: Removes images with poor reprojection errors
-    for x in [10, 5, 2]:
+    for x in [20, 10, 5]:
         print(x)
         ignore_images = get_poor_detections_images(img_file_map, tvecs_ct, rvecs_ct, cam_mtx, dist_coef,
                                        all_ch_points, all_ch_corners, all_ch_ids, x)
@@ -140,13 +140,9 @@ def calibrate(board, hand_eye_method, paths, image_names_ignored=[], use_eye_in_
             joint_values = joint_values+joint_values_constant_error-joint_values_offset + joint_efforts*joint_effort_coefs
             pin.forwardKinematics(panda_model, panda_data, joint_values)
             eef_pose = pin.updateFramePlacement(panda_model, panda_data, panda_hand_id)
-            # print(type(eef_pose))
-            # print(eef_pose.translation)
-            # eef_pose.translation[2] -= sag[0]*(np.linalg.norm(eef_pose.translation[0:2])**2)
             R_sag = pin.SE3(rotation_matrix(np.cross(np.array([0, 0, 1]), eef_pose.translation),
                                     sag[0] * np.linalg.norm(eef_pose.translation[0:2])))
             eef_pose = R_sag * eef_pose
-            # eef_pose.translation[]
             new_t_bg = eef_pose.translation
             new_R_bg = eef_pose.rotation
             new_T_bg = pin.SE3(new_R_bg, new_t_bg)#*T_hand
@@ -174,19 +170,13 @@ def calibrate(board, hand_eye_method, paths, image_names_ignored=[], use_eye_in_
         moveit_data = read_yaml(moveit_img_info_path)
         joint_values = np.array(moveit_data['joint_values'][0:7] + [0.0] * 2)
         joint_efforts = np.array(moveit_data['joint_torques'][0:7] + [0.0] * 2)
-        # joint_values = joint_values + joint_values_constant_error - joint_values_offset  # +joint_values_noise
         joint_values = joint_values + joint_values_constant_error - joint_values_offset + joint_efforts * joint_effort_coefs
 
         pin.forwardKinematics(panda_model, panda_data, joint_values)
         eef_pose = pin.updateFramePlacement(panda_model, panda_data, panda_hand_id)
-        # print("eef_pose1:", eef_pose)
-        #eef_pose.translation[2] -= sag[0]*(np.linalg.norm(eef_pose.translation[0:2])**2)
         R_sag = pin.SE3(rotation_matrix(np.cross(np.array([0, 0, 1]), eef_pose.translation),
                                         sag[0] * np.linalg.norm(eef_pose.translation[0:2])))
         eef_pose = R_sag*eef_pose
-        # print("eef:", eef_pose)
-        # print("eef_change:", -sag[0]*(np.linalg.norm(eef_pose.translation[0:2])**2))
-        # print("eef_pose2:", eef_pose)
         new_t_bg = np.array(eef_pose.translation)
         new_R_bg = np.array(eef_pose.rotation)
         new_T_bg = pin.SE3(new_R_bg, new_t_bg)  # *T_hand
@@ -199,6 +189,51 @@ def calibrate(board, hand_eye_method, paths, image_names_ignored=[], use_eye_in_
     image_names = list(img_file_map.keys())
     T_gc, T_bt = calibrate_eye_in_hand(rvecs_ct, tvecs_ct, R_bg_lst, t_bg_lst, image_names, paths['eye_in_hand_dir'],
                                        hand_eye_method)
+
+
+    ### TESTING ON A DIFFERENT IMAGE SET ###
+    test_data_dir_path = Path(str(paths['data_dir']).replace("train", "test"))
+
+    img_file_map = load_images(test_data_dir_path, True)  # dict of {img_name (without suffix): gray_image}
+
+    all_ch_points, all_ch_corners, all_ch_ids, all_ar_corners, all_ar_ids, unused_image_names = detect_corners_all_imgs(
+        img_file_map, board)
+    # Filter out images with too few marker detections
+    for img_name in unused_image_names:
+        img_file_map.pop(img_name)
+    cam_mtx, dist_coef, rvecs_ct, tvecs_ct = calibrate_camera(all_ch_points, all_ch_corners, imsize)
+
+    for x in [20, 10, 5]:
+        ignore_images = get_poor_detections_images(img_file_map, tvecs_ct, rvecs_ct, cam_mtx, dist_coef,
+                                       all_ch_points, all_ch_corners, all_ch_ids, x)
+        for img_name in ignore_images:
+            img_file_map.pop(img_name)
+        all_ch_points, all_ch_corners, all_ch_ids, all_ar_corners, all_ar_ids, unused_image_names = detect_corners_all_imgs(img_file_map, board)
+        for img_name in unused_image_names:
+            img_file_map.pop(img_name)
+        cam_mtx, dist_coef, rvecs_ct, tvecs_ct = calibrate_camera(all_ch_points, all_ch_corners, imsize)
+
+    t_bg_lst, R_bg_lst, T_bg_lst, joint_values_lst, joint_efforts_lst = [], [], [], [], []
+    for img_name in img_file_map:
+        moveit_img_info_path = (test_data_dir_path / img_name).with_suffix('.yaml')
+        moveit_data = read_yaml(moveit_img_info_path)
+        joint_values = np.array(moveit_data['joint_values'][0:7] + [0.0] * 2)
+        joint_efforts = np.array(moveit_data['joint_torques'][0:7] + [0.0] * 2)
+        joint_values = joint_values + joint_values_constant_error - joint_values_offset + joint_efforts * joint_effort_coefs
+        pin.forwardKinematics(panda_model, panda_data, joint_values)
+        eef_pose = pin.updateFramePlacement(panda_model, panda_data, panda_hand_id)
+        R_sag = pin.SE3(rotation_matrix(np.cross(np.array([0, 0, 1]), eef_pose.translation),
+                                        sag[0] * np.linalg.norm(eef_pose.translation[0:2])))
+        eef_pose = R_sag*eef_pose
+        new_t_bg = np.array(eef_pose.translation)
+        new_R_bg = np.array(eef_pose.rotation)
+        new_T_bg = pin.SE3(new_R_bg, new_t_bg)  # *T_hand
+        t_bg_lst.append(new_T_bg.translation)
+        R_bg_lst.append(new_T_bg.rotation)
+        T_bg_lst.append(new_T_bg)
+        joint_values_lst.append(joint_values)
+        joint_efforts_lst.append(joint_efforts)
+
     # Recover camera/target transformation from calibration and kinematics
     rvecs_ct, tvecs_ct = [], []
     T_cg = T_gc.inverse()
@@ -596,7 +631,7 @@ def main():
 
     plot_reprojection_errors(paths['camera_calibration_dir'] / 'reprojection_errors.yaml')
     plot_reprojection_errors(paths['eye_in_hand_dir'] / 'reprojection_errors.yaml')
-    plt.show()
+    # plt.show()
 
     print('Result:')
     print('|-Camera Matrix:')
