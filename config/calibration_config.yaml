@@ -5,8 +5,8 @@
 # result_directory: "/home/mfourmy/Documents/calibration_cam/calibrate_images12-05-2023-16_48/results"
 
 #directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg/calibration/calibration_d455_train"
-directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg/calibration/calibration_merged"
-result_directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg/calibration_results"
+directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration/calibration_merged"
+result_directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration_results"
 
 #directory: "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration/calibration_d455_high_res_2"
 #result_directory: "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration_results"
@@ -15,7 +15,7 @@ result_directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg/
 #result_directory: "/home/mfourmy/Documents/calibration_cam/calibration_eye_in_hand_30/results"
 
 # Remove some images if they seem to be outliers
-#image_names_ignored: []
+image_names_ignored: []
 #image_names_ignored: ['calibration_image_030',
 #                      'calibration_image_031',
 #                      'calibration_image_032',
@@ -31,7 +31,7 @@ result_directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg/
 #                      'calibration_image_048',
 #                      'calibration_image_049']  # example
 #image_names_ignored: ['calibration_image_014', 'calibration_image_018']  # example
-image_names_ignored: ['calibration_image_037', 'calibration_image_038']  # example
+#image_names_ignored: ['calibration_image_037', 'calibration_image_038']  # example
 #image_names_ignored: ['calibration_image_000', 'calibration_image_006', 'calibration_image_010', 'calibration_image_011', 'calibration_image_013', 'calibration_image_017', 'calibration_image_019', 'calibration_image_012', 'calibration_image_014', 'calibration_image_022', 'calibration_image_027']
 #image_names_ignored: ['0000', '0006', '0010', '0011', '0013', '0017', '0019', '0012', '0014', '0022', '0027']
 #image_names_ignored: ['0002', '0008', '0037', '0038', '0039', '0040', '0041', '0042', '0043', '0044', '0045', '0046', '0047', '0051', '0052', '0053'] #  simulation_final

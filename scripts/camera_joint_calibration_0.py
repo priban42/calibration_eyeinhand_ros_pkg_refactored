@@ -63,7 +63,7 @@ def calibrate(board, hand_eye_method, paths, image_names_ignored=[], use_eye_in_
     # rvecs_ct, tvecs_ct correspond to target2camera transformation in opencv notation convention 
     cam_mtx, dist_coef, rvecs_ct, tvecs_ct = calibrate_camera(all_ch_points, all_ch_corners, imsize)
     ##### Second iteration: Removes images with poor reprojection errors
-    for x in [20, 10, 5]:
+    for x in [40, 20, 10]:
         ignore_images = get_poor_detections_images(img_file_map, tvecs_ct, rvecs_ct, cam_mtx, dist_coef,
                                        all_ch_points, all_ch_corners, all_ch_ids, x)
         for img_name in ignore_images:
@@ -403,15 +403,7 @@ class ScaledBoard:
 
         self.ar_dict = aruco.Dictionary_get(aruco_dict_id)
         self.ar_board = aruco.CharucoBoard_create(squaresX, squaresY, square_length, marker_length, self.ar_dict)
-        # print(self.ar_dict)
-        # img_size = (500, 700)  # in pixels, better to be proportial to board size
-        # margin_size = 10  # margin in pixel wrt boarder of the img
-        # marker_border = 1  # number of "bits" surrounding each aruco encoding
-        # img = self.ar_board.draw(img_size, marginSize=margin_size, borderBits=marker_border)
-        # cv2.imwrite('charuco_board_from_calibration.bmp', img)
-        # board.chessboardCorners is NOT writable, we cannot override board.chessboardCorners even if it is not useful
         self.scaled_corners = self.scale_board_corners(self.ar_board.chessboardCorners, self.board_scaling)
-        # self.ar_board.chessboardCorners = self.scaled_corners  # does not do anything
 
     @staticmethod
     def scale_board_corners(board_corners, scale):
