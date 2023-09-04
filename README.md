@@ -11,7 +11,7 @@ Calibration returns camera matrix, distortion coefficients, transform matrix fro
 
 ## Function and results
 ### Image capturing
-Package provides image-capturing node `camera_calibration.py`. Node is configured via file `/config/image_capture_config.yaml`, see [configuration](#image-capture-configuration). Node uses moveIt commander to move robot. Robot is moved to position defined in `txt` file, one line represents one pose (position and roation in quaternion). In each pose one image is taken and stored with `yaml` file containig information about the image. First pose is represented as a starting pose and no image is taken. After all images are taken robot returns to the starting pose.
+Package provides image-capturing node `camera_robot_calibration.py`. Node is configured via file `/config/image_capture_config.yaml`, see [configuration](#image-capture-configuration). Node uses moveIt commander to move robot. Robot is moved to position defined in `txt` file, one line represents one pose (position and roation in quaternion). In each pose one image is taken and stored with `yaml` file containig information about the image. First pose is represented as a starting pose and no image is taken. After all images are taken robot returns to the starting pose.
 ### Pose file generation
 Poses can be generated using script `compute points.py`. In the beginng of the `main()` function is list of dictionaries named `points`. Each item of `points` contain definition of point in space. These points are stored in file in the same order as are in list. Script requires definition of `base_xyz` list containing RPY of the base orientation of manipulator. For example the orientation to point end effector to the XY plain.
 Points can be of two types, point on the shpere or the plain.
@@ -26,10 +26,12 @@ Center defines 'center' of the plain (plain mathematically has no center, but in
 
 End effector points to the center of the center of the sphere. Orientation parameter rotates end effector around axis p.
 
-### Camera calibration
-Script `camera_calibration.py` contains routine to calibrate eye-in-hand and camera calibration. The script is configured via `yaml` file, see [configuration](#image-capture-configuration). Calibration is divided into two parts, camera calibration and eye-in-hand calibration. During calibration are stored results like images with detected markers, re-projection errors and images with drawn re-projected points and error vectors. Results of each part are stored separately.
+### Camera and calibration
+Script `camera_robot_calibration.py` contains routine to calibrate eye-in-hand and camera calibration. The script is configured via `yaml` file, see [configuration](#image-capture-configuration). Calibration is divided into three parts, camera calibration and eye-in-hand calibration and robot calibration. During calibration are stored results like images with detected markers, re-projection errors and images with drawn re-projected points and error vectors. Results of each part are stored separately.
 
 Durring eye-in-hand calibration is usend numerical method to estimate this transform. To estimate the transform from base of your robot to checker board frame we compute this transform for each image separately. As the eye-in-hand calibration is impossible to compute analytically, the transform from base to checker board is slightly different for each image. Each transform from base to checker board is stored into a `yaml` file. To get the final transform from base to checker board we take mean translation and rotation vectors and compose matrix. Function also stores two graphs showing deviation in position and rotation for each image from average vector.
+
+The robot calibration takes the initial camera to end-effector pose and tries to refine the defined robot model to achieve the smallest reprojection error using least-square method.
 
 Finally the function stores the calibration result into a `yaml` file. Name of this file is defined in configuration file. Data are stored in camera_calibration format compatible with ROS. This file is also compatible with [Eyeinhand Calibration Publisher](https://gitlab.ciirc.cvut.cz/chaloto3/eyeinhand_calibration_publisher).
 
@@ -170,6 +172,8 @@ Python:
 * Numpy
 * OpenCV2 in complete version (containing modules of 3-th party)
 * Pyyaml
+* Scipy
+* Pinocchio
 
 ROS:
 * MoveIt
