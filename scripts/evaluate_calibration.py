@@ -1,6 +1,3 @@
-import camera_joint_calibration_0_eval
-import camera_joint_calibration_1_eval
-import camera_joint_calibration_efforts_eval
 import calibration_set_merger
 import yaml
 import os
@@ -9,20 +6,6 @@ import matplotlib.pyplot as plt
 import pinocchio as pin
 from pathlib import Path
 
-def generate_calibrations_0():
-    for x in range(20, 35):
-        calibration_set_merger.random_split(x)
-        camera_joint_calibration_0_eval.main()
-
-def generate_calibrations_1():
-    for x in range(5):
-        calibration_set_merger.random_split(x)
-        camera_joint_calibration_1_eval.main()
-
-def generate_calibrations_3():
-    for x in range(5):
-        calibration_set_merger.random_split(x)
-        camera_joint_calibration_efforts_eval.main()
 def load_json(base_path, dir_name, file_name = "camera_calibration_result.yaml"):
     path = Path(os.path.join(base_path, dir_name))/file_name
     with open(path, "r") as file:

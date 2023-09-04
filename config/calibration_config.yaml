@@ -5,8 +5,9 @@
 # result_directory: "/home/mfourmy/Documents/calibration_cam/calibrate_images12-05-2023-16_48/results"
 
 #directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg/calibration/calibration_d455_train"
-directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration/calibration_merged"
-result_directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration_results"
+#directory: "C:/Users/Vojta/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration/calibration_merged"
+directory: "/home/bagr/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration/calibration_merged"
+result_directory: "/home/bagr/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration_results"
 
 #directory: "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration/calibration_d455_high_res_2"
 #result_directory: "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration_results"

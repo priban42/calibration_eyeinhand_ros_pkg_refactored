@@ -53,6 +53,10 @@ class ScaledBoard:
         return scaled_pts
 
 class RobotModel():
+    """
+        In order to calibrate using a different robot model create a new class inheriting from this one.
+         override the self.update_model and self.get_eef_pose accordingly.
+    """
     def __init__(self, urdf_path = 'panda.urdf', eef_id = 'panda_hand'):
         self.urdf_path = urdf_path
         self.robot_model = pin.buildModelFromUrdf(self.urdf_path)
@@ -79,7 +83,7 @@ class Calibration():
         self.paths = None
         self.board = ScaledBoard(board_data=self.config)
 
-        self.robot_model = RobotModel()
+        self.robot_model = None
 
 
         self.imsize = None
@@ -472,11 +476,11 @@ class Calibration():
         return res
 
     def calibrate_robot(self):
-        x0 = np.concatenate((np.zeros(12), np.array([0, 0, 0, 0, 0, 0, 0] + [0, 0])), axis=0)
+        x0 = np.concatenate((np.zeros(12), np.zeros(self.robot_model.values_to_optimize)), axis=0)
         # self.res_len = sum(2 * len(self.detections_map[img_name]["ch_points"]) for img_name in self.detections_map)
         self.res_len = len(self.detections_map)
         result = least_squares(fun=self.get_reprj_res, x0=x0, jac='3-point', method='trf', verbose=2, xtol=5e-4, max_nfev=50)
-        self.robot_model.update_model(result.x[12:19])
+        self.robot_model.update_model(result.x[12:12+self.robot_model.values_to_optimize])
 
     def plot_reprojection_errors(self, path, axis):
         calib_res_path = path.parent
@@ -536,6 +540,10 @@ class Calibration():
 
 def main():
     c = Calibration()
+    rm = RobotModel()
+    # rm.joint_offsets_mask = np.array([0, 0, 0, 0, 0, 0, 0])
+    rm.joint_offsets_mask = np.array([1, 1, 1, 1, 1, 1, 1])
+    c.robot_model = rm
     c.calibrate()
 
 if __name__ == "__main__":

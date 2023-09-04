@@ -61,7 +61,7 @@ def main():
 
 def random_split(seed):
     # BASE_PATH = "/home/bagr/ws_moveit/src/calibration_eyeinhand_ros_pkg/calibration"
-    BASE_PATH = "C:\\Users\\Vojta\\PycharmProjects\\calibration_eyeinhand_ros_pkg_refactored\\calibration"
+    BASE_PATH = "/home/bagr/PycharmProjects/calibration_eyeinhand_ros_pkg_refactored/calibration"
     SPLIT = 1
     # CHUNK_SIZES = [0.6, 0.4] # len = len(new_set_names), sum = 1
     CHUNK_SIZES = [1]
