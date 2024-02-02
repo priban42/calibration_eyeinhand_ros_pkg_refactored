@@ -114,12 +114,14 @@ __error_scaling_factor__: Factor scaling error vector in re-projection error ima
 ## Usage
 Configure package using configuration `yaml` files. To start the calibration routine simply open new terminal and run
 ```
-roslaunch camera_calibration_pkg calibration.launch
+roslaunch realsense2_camera rs_camera.launch color_width:=1280 color_height:=720
+rosrun image_view image_view image:=/camera/color/image_raw  # to preview the camera feed
+roslaunch camera_eyeinhand_ros_pkg panda_data_acquisition.launch
 ```
 When the capturing is complete run
 ```
-roscd camera_calibration_pkg/scripts
-python3 ./scripts/camera_calibration.py
+roscd camera_eyeinhand_ros_pkg/scripts
+python3 ./scripts/camera_robot_calibration.py
 ```
 Function prints the result stores it if is configured so.
 
